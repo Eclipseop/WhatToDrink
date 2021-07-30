@@ -2,8 +2,7 @@ import React from "react";
 import useSWR from "swr";
 import DrinkModal from "../component/DrinkModal";
 
-// @ts-ignore
-const fetcher = (url) => fetch(url).then(res => res.json());
+export const fetcher = (url: string): Promise<Cocktail[]> => fetch(url).then(res => res.json());
 
 export interface Cocktail {
   createdAt: string;
@@ -22,11 +21,11 @@ export interface Ingredient {
   name: string;
 }
 
-const Index = () => {
+const Index: React.FC = () => {
   const { data, error } = useSWR<Cocktail[]>('api/get-drinks', fetcher);
 
-  if (error) return "Error =/";
-  if (!data) return "Loading...";
+  if (error) return <div>Error =/</div>;
+  if (!data) return <div>Loading...</div>;
   console.log(data);
 
   return (
@@ -35,7 +34,7 @@ const Index = () => {
         {data.map((drink) => <DrinkModal key={drink.id} cocktail={drink} />)}
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Index;

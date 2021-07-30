@@ -1,9 +1,8 @@
 /* eslint-disable import/no-anonymous-default-export */
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   // const data = await prisma.cocktail.create({
@@ -38,4 +37,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   console.log(data);
   res.status(200).json(data);
-}
+};

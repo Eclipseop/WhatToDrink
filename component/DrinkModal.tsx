@@ -3,11 +3,12 @@ import React from 'react';
 import { Cocktail } from '../pages';
 
 interface Props {
-    cocktail: Cocktail
+    cocktail: Cocktail;
+    available?: string[];
 }
 
-const DrinkModal = (props: Props) => {
-    const { cocktail } = props;
+const DrinkModal: React.FC<Props> = (props: Props) => {
+    const { cocktail, available } = props;
 
     return (
         <div className="bg-white rounded-md p-1 h-auto">
@@ -24,7 +25,7 @@ const DrinkModal = (props: Props) => {
                 <div className="flex">
                     <ul className="list-disc list-inside px-1">
                         {cocktail.ingredients.map((ingredient) => (
-                            <li key={ingredient.id}>
+                            <li key={ingredient.id} className={`${available?.includes(ingredient.name) ? null : 'text-red-500 font-semibold'}`}>
                                 {`${ingredient.amount} ${ingredient.name}`}
                             </li>
                         ))}
@@ -32,7 +33,7 @@ const DrinkModal = (props: Props) => {
                 </div>
             </div>
         </div>
-    )
+    );
 };
 
 export default DrinkModal;
