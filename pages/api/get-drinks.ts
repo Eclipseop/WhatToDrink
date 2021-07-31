@@ -5,31 +5,13 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  // const data = await prisma.cocktail.create({
-  //   data: {
-  //     name: 'White Russian',
-  //     description: 'A classic drink from the UK',
-  //     image: 'www.google.com',
-  //     ingredients: {
-  //       create: [
-  //         {
-  //           name: 'Vodka',
-  //           amount: '2 oz',
-  //         },
-  //         {
-  //           name: 'Kahlua',
-  //           amount: '1 oz',
-  //         },
-  //         {
-  //           name: 'Heavy Cream',
-  //           amount: '1 splash',
-  //         },
-  //       ],
-  //     }
-  //   }
-  // });
+  if (req.method !== 'GET') {
+    res.status(405).send('Method not allowed');
+    return;
+  }
 
   const data = await prisma.cocktail.findMany({
+    take: 25,
     include: {
       ingredients: true,
     }

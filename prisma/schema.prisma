@@ -7,12 +7,12 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["orderByRelation"]
 }
 
 model Cocktail {
   id          Int          @id @default(autoincrement())
-  createdAt   DateTime     @default(now())
   name        String
   description String
   image       String
@@ -21,7 +21,6 @@ model Cocktail {
 
 model Ingredient {
   id         Int       @id @default(autoincrement())
-  createdAt  DateTime  @default(now())
   name       String
   Cocktail   Cocktail? @relation(fields: [cocktailId], references: [id])
   cocktailId Int?

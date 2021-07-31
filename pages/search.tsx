@@ -38,14 +38,14 @@ const Search: React.FC = () => {
         if (!cocktails) return null;
 
         return (
-            <div className="flex gap-2 p-2">
+            <div className="flex flex-wrap gap-2 p-2">
                 {cocktails.map((drink) => <DrinkModal key={drink.id} cocktail={drink} available={ingredients} />)}
             </div>
         );
     };
 
     return (
-        <div className="h-screen flex flex-col gap-2 bg-red-600">
+        <div className="h-full flex flex-col gap-2 bg-red-600">
             <div className="flex flex-col mx-auto">
                 <input
                     type="text"
