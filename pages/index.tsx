@@ -31,7 +31,7 @@ const Index: React.FC = () => {
   return (
     <div className="h-screen bg-red-800">
       <div className="flex gap-2 p-2 items-start flex-wrap">
-        {data.map((drink) => <DrinkModal key={drink.id} cocktail={drink} />)}
+        {data.map((drink) => <DrinkModal key={drink.id} cocktail={drink} available={[]}/>)}
       </div>
     </div>
   );

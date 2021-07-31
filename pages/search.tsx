@@ -16,6 +16,7 @@ const Search: React.FC = () => {
 
     useEffect(() => {
         const fetch = async () => {
+            if (ingredients.length === 0) return;
             const { data } = await axios.get<Cocktail[]>(generateURL(ingredients));
             setCocktails(data);
         };

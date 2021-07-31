@@ -1,11 +1,22 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import { Cocktail } from '../pages';
+import { Cocktail, Ingredient } from '../pages';
 
 interface Props {
     cocktail: Cocktail;
-    available?: string[];
+    available: string[];
 }
+
+const has = (available: string[], ingredient: Ingredient): boolean => {
+    for (const avail of available) {
+        const ing = ingredient.name.toLowerCase();
+        const avail1 = avail.toLowerCase();
+        console.log(`${ing} - ${avail1}`);
+        if (ing.includes(avail1)) return true;
+    }
+
+    return false;
+};
 
 const DrinkModal: React.FC<Props> = (props: Props) => {
     const { cocktail, available } = props;
@@ -25,7 +36,7 @@ const DrinkModal: React.FC<Props> = (props: Props) => {
                 <div className="flex">
                     <ul className="list-disc list-inside px-1">
                         {cocktail.ingredients.map((ingredient) => (
-                            <li key={ingredient.id} className={`${available?.includes(ingredient.name) ? null : 'text-red-500 font-semibold'}`}>
+                            <li key={ingredient.id} className={`${has(available, ingredient) ? null:'text-red-500 font-semibold'}`}>
                                 {`${ingredient.amount} ${ingredient.name}`}
                             </li>
                         ))}
