@@ -86,7 +86,7 @@ const Search: React.FC = () => {
 
     return (
         <div className="min-h-screen flex flex-col gap-2 bg-gradient-to-tr from-red-500 to-yellow-300 py-3 items-center">
-            <div className="flex flex-col items-center bg-white rounded-lg w-5/6 md:w-1/2 p-1">
+            <div className="flex flex-col items-center bg-white rounded-lg w-5/6 md:w-1/2 p-1 text-center">
                 <input
                     type="text"
                     placeholder="Add ingredients"
