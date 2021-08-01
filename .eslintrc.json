@@ -19,6 +19,13 @@
   "rules": {
     "react/react-in-jsx-scope": "off",
     "semi": "warn",
-    "@typescript-eslint/explicit-module-boundary-types": "off"
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "indent": [
+      "error",
+      4,
+      {
+        "SwitchCase": 1
+      }
+    ]
   }
 }
