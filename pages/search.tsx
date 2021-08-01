@@ -24,6 +24,7 @@ const Search: React.FC = () => {
     }, [ingredients]);
 
     const addIngredient = (ingredient: string) => {
+        if (ingredient.length === 0) return;
         const newIngredients = ingredients.concat([ingredient]);
         setIngredients(newIngredients);
     };
