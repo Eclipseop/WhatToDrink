@@ -35,6 +35,12 @@ const Search: React.FC = () => {
         }
     };
 
+    const removeIngredient = (ingredient: string) => {
+        console.log('call');
+        const newIngredients = ingredients.filter(i => i !== ingredient);
+        setIngredients(newIngredients);
+    };
+
     const ShowResults: React.FC = () => {
         if (!cocktails) return null;
 
@@ -42,6 +48,18 @@ const Search: React.FC = () => {
             <div className="flex flex-wrap gap-2 p-2 mx-auto justify-center">
                 {cocktails.map((drink) => <DrinkModal key={drink.id} cocktail={drink} available={ingredients} />)}
             </div>
+        );
+    };
+
+    interface Props {
+        ingredient: string;
+        remove: () => void;
+    }
+
+    const SearchInput: React.FC<Props> = (props: Props) => {
+        const { ingredient, remove } = props;
+        return (
+            <li onClick={() => remove()} className="hover:line-through">{ingredient}</li>
         );
     };
 
@@ -59,7 +77,7 @@ const Search: React.FC = () => {
                 <div>
                     <ul>
                         {ingredients.map((ingredient) => (
-                            <li key={ingredient + ""}>{ingredient}</li>
+                            <SearchInput ingredient={ingredient} remove={() => removeIngredient(ingredient)} key={ingredient} />
                         ))}
                     </ul>
                 </div>
