@@ -39,7 +39,7 @@ const Search: React.FC = () => {
         if (!cocktails) return null;
 
         return (
-            <div className="flex flex-wrap gap-2 p-2">
+            <div className="flex flex-wrap gap-2 p-2 mx-auto justify-center">
                 {cocktails.map((drink) => <DrinkModal key={drink.id} cocktail={drink} available={ingredients} />)}
             </div>
         );
