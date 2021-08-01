@@ -37,9 +37,11 @@ const Search: React.FC = () => {
     };
 
     const removeIngredient = (ingredient: string) => {
-        console.log('call');
         const newIngredients = ingredients.filter(i => i !== ingredient);
         setIngredients(newIngredients);
+        if (newIngredients.length === 0) {
+            setCocktails([]);
+        }
     };
 
     const ShowResults: React.FC = () => {
