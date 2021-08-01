@@ -4,7 +4,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { Ingredient, PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-const score = (available: string[], required: Ingredient[]): number => {
+const score = (available: string[] | string, required: Ingredient[]): number => {
     let temp = 0;
     for (const ingredient of required) {
         for (const avail of available) {
@@ -34,8 +34,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         }
     });
     data.sort((a, b) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         return score(available, b.ingredients) - score(available, a.ingredients);
     });
     const sorted = data.splice(0, 25);
