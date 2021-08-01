@@ -45,7 +45,7 @@ const Search: React.FC = () => {
         if (!cocktails) return null;
 
         return (
-            <div className="flex flex-wrap gap-2 p-2 mx-auto justify-center">
+            <div className="flex flex-wrap gap-2 mx-auto justify-center">
                 {cocktails.map((drink) => <DrinkModal key={drink.id} cocktail={drink} available={ingredients} />)}
             </div>
         );
@@ -59,28 +59,26 @@ const Search: React.FC = () => {
     const SearchInput: React.FC<Props> = (props: Props) => {
         const { ingredient, remove } = props;
         return (
-            <li onClick={() => remove()} className="hover:line-through">{ingredient}</li>
+            <li onClick={() => remove()} className="hover:line-through text-gray-600">{ingredient}</li>
         );
     };
 
     return (
-        <div className="h-full flex flex-col gap-2 bg-red-600">
-            <div className="flex flex-col mx-auto">
+        <div className="min-h-screen flex flex-col gap-2 bg-gradient-to-tr from-red-500 to-yellow-300 py-3 items-center">
+            <div className="flex flex-col items-center bg-white rounded-lg w-5/6 md:w-1/2 p-1">
                 <input
                     type="text"
                     placeholder="Add ingredients"
-                    className="border rounded p-1"
+                    className="border rounded p-1 transition-width ease-out delay-100 w-1/2 focus:w-5/6 focus:outline-none text-center"
                     value={input}
                     onChange={e => setInput(e.target.value)}
                     onKeyDown={(e) => handleKeyDown(e)}
                 />
-                <div>
-                    <ul>
-                        {ingredients.map((ingredient) => (
-                            <SearchInput ingredient={ingredient} remove={() => removeIngredient(ingredient)} key={ingredient} />
-                        ))}
-                    </ul>
-                </div>
+                <ul>
+                    {ingredients.map((ingredient) => (
+                        <SearchInput ingredient={ingredient} remove={() => removeIngredient(ingredient)} key={ingredient} />
+                    ))}
+                </ul>
             </div>
             <ShowResults />
         </div>
