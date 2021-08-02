@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import DrinkModal from '../component/DrinkModal';
 import axios from 'axios';
-import { signIn, signOut, useSession, getSession } from 'next-auth/client';
+import { useSession, getSession } from 'next-auth/client';
 import { GetServerSideProps } from 'next';
 import { PrismaClient } from '@prisma/client';
+import LoginBar from '../component/LoginBar';
 
 export const fetcher = (url: string): Promise<Cocktail[]> => fetch(url).then(res => res.json());
 
@@ -30,7 +31,7 @@ const generateURL = (ingredients: string[]): string => {
     return base;
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const prisma = new PrismaClient();
 
     const session = await getSession({ req });
@@ -64,7 +65,7 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
     const [ingredients, setIngredients] = useState<string[]>(props.ingredients);
     const [input, setInput] = useState("");
     const [cocktails, setCocktails] = useState<Cocktail[]>([]);
-    const [session, loading] = useSession();
+    const [session] = useSession();
 
     useEffect(() => {
         const fetch = async () => {
@@ -79,13 +80,10 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
         if (ingredient.length === 0) return;
         const newIngredients = ingredients.concat([ingredient]);
         setIngredients(newIngredients);
+
+        if (!session) return;
         try {
-            const body = { ingredient };
-            fetch(`/api/add-ingredient-to-account`, {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body),
-            });
+            axios.post('/api/add-ingredient-to-account', { ingredient });
         } catch (err) {
             console.error(err);
         }
@@ -103,6 +101,13 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
         setIngredients(newIngredients);
         if (newIngredients.length === 0) {
             setCocktails([]);
+        }
+
+        if (!session) return;
+        try {
+            axios.post('/api/remove-ingredient-from-account', { ingredient });
+        } catch (err) {
+            console.error(err);
         }
     };
 
@@ -128,39 +133,28 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
         );
     };
 
-    const Login: React.FC = () => {
-        return (<>
-            {!session && <>
-                Not signed in <br />
-                <button onClick={() => signIn()}>Sign in</button>
-            </>}
-            {session && <>
-                Signed in as {session?.user?.email} <br />
-                <button onClick={() => signOut()}>Sign out</button>
-            </>}
-        </>);
-    };
-
     return (
-        <div className="min-h-screen flex flex-col gap-2 bg-gradient-to-tr from-red-500 to-yellow-300 py-3 items-center">
-            <Login />
-            <div className="flex flex-col items-center bg-white rounded-lg w-5/6 md:w-1/2 p-1 text-center">
-                <input
-                    type="text"
-                    placeholder="Add ingredients"
-                    className="border rounded p-1 transition-width ease-out delay-100 w-1/2 focus:w-5/6 focus:outline-none text-center"
-                    value={input}
-                    onChange={e => setInput(e.target.value)}
-                    onKeyDown={(e) => handleKeyDown(e)}
-                />
-                <ul>
-                    {ingredients.map((ingredient) => (
-                        <SearchInput ingredient={ingredient} remove={() => removeIngredient(ingredient)} key={ingredient} />
-                    ))}
-                </ul>
+        <>
+            <LoginBar />
+            <div className="min-h-screen flex flex-col gap-2 bg-gradient-to-tr from-red-500 to-yellow-300 py-3 items-center">
+                <div className="flex flex-col items-center bg-white rounded-lg w-5/6 md:w-1/2 p-1 text-center">
+                    <input
+                        type="text"
+                        placeholder="Add ingredients"
+                        className="border rounded p-1 transition-width ease-out delay-100 w-1/2 focus:w-5/6 focus:outline-none text-center"
+                        value={input}
+                        onChange={e => setInput(e.target.value)}
+                        onKeyDown={(e) => handleKeyDown(e)}
+                    />
+                    <ul>
+                        {ingredients.map((ingredient) => (
+                            <SearchInput ingredient={ingredient} remove={() => removeIngredient(ingredient)} key={ingredient} />
+                        ))}
+                    </ul>
+                </div>
+                <ShowResults />
             </div>
-            <ShowResults />
-        </div>
+        </>
     );
 };
 
