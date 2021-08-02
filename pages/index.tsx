@@ -39,7 +39,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const data = await prisma.userIngredient.findMany({
         where: {
             user: {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 email: session?.email
             }

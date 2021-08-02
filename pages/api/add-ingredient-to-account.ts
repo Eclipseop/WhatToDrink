@@ -30,7 +30,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             name: ingredient,
             user: {
                 connect: {
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     email: session.user?.email
                 }

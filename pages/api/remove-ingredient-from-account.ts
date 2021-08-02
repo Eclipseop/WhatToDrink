@@ -27,7 +27,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const data = await prisma.userIngredient.deleteMany({
         where: {
             user: {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 email: session?.email
             },
