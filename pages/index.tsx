@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import DrinkModal from '../component/DrinkModal';
 import axios from 'axios';
+import { useSession, getSession } from 'next-auth/client';
+import { GetServerSideProps } from 'next';
+import { PrismaClient } from '@prisma/client';
+import LoginBar from '../component/LoginBar';
 
 export const fetcher = (url: string): Promise<Cocktail[]> => fetch(url).then(res => res.json());
 
@@ -27,10 +31,37 @@ const generateURL = (ingredients: string[]): string => {
     return base;
 };
 
-const Search: React.FC = () => {
-    const [ingredients, setIngredients] = useState<string[]>([]);
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+    const prisma = new PrismaClient();
+
+    const session = await getSession({ req });
+
+    const data = await prisma.userIngredient.findMany({
+        where: {
+            user: {
+                // @ts-ignore
+                email: session?.email
+            }
+        }
+    });
+
+    const ingredients = data.map(data => data.name);
+
+    return {
+        props: { ingredients },
+    };
+};
+
+interface SearchProps {
+    ingredients: string[];
+}
+
+
+const Index: React.FC<SearchProps> = (props: SearchProps) => {
+    const [ingredients, setIngredients] = useState<string[]>(props.ingredients);
     const [input, setInput] = useState("");
     const [cocktails, setCocktails] = useState<Cocktail[]>([]);
+    const [session] = useSession();
 
     useEffect(() => {
         const fetch = async () => {
@@ -45,6 +76,13 @@ const Search: React.FC = () => {
         if (ingredient.length === 0) return;
         const newIngredients = ingredients.concat([ingredient]);
         setIngredients(newIngredients);
+
+        if (!session) return;
+        try {
+            axios.post('/api/add-ingredient-to-account', { ingredient });
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -59,6 +97,13 @@ const Search: React.FC = () => {
         setIngredients(newIngredients);
         if (newIngredients.length === 0) {
             setCocktails([]);
+        }
+
+        if (!session) return;
+        try {
+            axios.post('/api/remove-ingredient-from-account', { ingredient });
+        } catch (err) {
+            console.error(err);
         }
     };
 
@@ -85,25 +130,28 @@ const Search: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col gap-2 bg-gradient-to-tr from-red-500 to-yellow-300 py-3 items-center">
-            <div className="flex flex-col items-center bg-white rounded-lg w-5/6 md:w-1/2 p-1 text-center">
-                <input
-                    type="text"
-                    placeholder="Add ingredients"
-                    className="border rounded p-1 transition-width ease-out delay-100 w-1/2 focus:w-5/6 focus:outline-none text-center"
-                    value={input}
-                    onChange={e => setInput(e.target.value)}
-                    onKeyDown={(e) => handleKeyDown(e)}
-                />
-                <ul>
-                    {ingredients.map((ingredient) => (
-                        <SearchInput ingredient={ingredient} remove={() => removeIngredient(ingredient)} key={ingredient} />
-                    ))}
-                </ul>
+        <>
+            <LoginBar />
+            <div className="min-h-screen flex flex-col gap-2 bg-gradient-to-tr from-red-500 to-yellow-300 py-3 items-center">
+                <div className="flex flex-col items-center bg-white rounded-lg w-5/6 md:w-1/2 p-1 text-center">
+                    <input
+                        type="text"
+                        placeholder="Add ingredients"
+                        className="border rounded p-1 transition-width ease-out delay-100 w-1/2 focus:w-5/6 focus:outline-none text-center"
+                        value={input}
+                        onChange={e => setInput(e.target.value)}
+                        onKeyDown={(e) => handleKeyDown(e)}
+                    />
+                    <ul>
+                        {ingredients.map((ingredient) => (
+                            <SearchInput ingredient={ingredient} remove={() => removeIngredient(ingredient)} key={ingredient} />
+                        ))}
+                    </ul>
+                </div>
+                <ShowResults />
             </div>
-            <ShowResults />
-        </div>
+        </>
     );
 };
 
-export default Search;
+export default Index;

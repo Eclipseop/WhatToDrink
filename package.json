@@ -10,9 +10,11 @@
     "fix": "next lint --fix"
   },
   "dependencies": {
+    "@next-auth/prisma-adapter": "^0.5.3",
     "@prisma/client": "2.28.0",
     "axios": "^0.21.1",
     "next": "11.0.1",
+    "next-auth": "^3.27.3",
     "prisma": "2.28.0",
     "react": "17.0.2",
     "react-dom": "17.0.2"
