@@ -36,7 +36,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
     const session = await getSession({ req });
 
-    console.log(session);
     const data = await prisma.userIngredient.findMany({
         where: {
             user: {
@@ -48,8 +47,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     });
 
     const ingredients = data.map(data => data.name);
-
-    console.log(ingredients);
 
     return {
         props: { ingredients },
