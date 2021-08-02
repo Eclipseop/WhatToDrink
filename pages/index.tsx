@@ -5,6 +5,7 @@ import { useSession, getSession } from 'next-auth/client';
 import { GetServerSideProps } from 'next';
 import { PrismaClient } from '@prisma/client';
 import LoginBar from '../component/LoginBar';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 export const fetcher = (url: string): Promise<Cocktail[]> => fetch(url).then(res => res.json());
 
@@ -25,9 +26,10 @@ export interface Ingredient {
     name: string;
 }
 
-const generateURL = (ingredients: string[]): string => {
+const generateURL = (ingredients: string[], pageIdx: number): string => {
     let base = "api/get-drinks-by-ingredients?ingredients=";
     base += ingredients.join(",");
+    base += '&idx=' + pageIdx;
     return base;
 };
 
@@ -62,19 +64,23 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
     const [input, setInput] = useState("");
     const [cocktails, setCocktails] = useState<Cocktail[]>([]);
     const [session] = useSession();
+    const [pageIdx, setPageIdx] = useState(0);
 
     useEffect(() => {
         const fetch = async () => {
             if (ingredients.length === 0) return;
-            const { data } = await axios.get<Cocktail[]>(generateURL(ingredients));
+            const { data } = await axios.get<Cocktail[]>(generateURL(ingredients, pageIdx));
             setCocktails(data);
         };
         fetch();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ingredients]);
 
     const addIngredient = (ingredient: string) => {
         if (ingredient.length === 0) return;
         const newIngredients = ingredients.concat([ingredient]);
+        setPageIdx(0);
+        setCocktails([]);
         setIngredients(newIngredients);
 
         if (!session) return;
@@ -94,10 +100,9 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
 
     const removeIngredient = (ingredient: string) => {
         const newIngredients = ingredients.filter(i => i !== ingredient);
+        setPageIdx(0);
+        setCocktails([]);
         setIngredients(newIngredients);
-        if (newIngredients.length === 0) {
-            setCocktails([]);
-        }
 
         if (!session) return;
         try {
@@ -107,13 +112,28 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
         }
     };
 
+    const fetchMore = async () => {
+        setPageIdx(pageIdx + 1);
+        const { data } = await axios.get<Cocktail[]>(generateURL(ingredients, pageIdx));
+        const newArr = cocktails.concat(data);
+        setCocktails(newArr);
+    };
+
     const ShowResults: React.FC = () => {
-        if (!cocktails) return null;
+        if (cocktails.length === 0) return null;
 
         return (
-            <div className="flex flex-wrap gap-2 mx-auto justify-center">
-                {cocktails.map((drink) => <DrinkModal key={drink.id} cocktail={drink} available={ingredients} />)}
-            </div>
+            <InfiniteScroll
+                dataLength={cocktails.length}
+                next={fetchMore}
+                hasMore={true}
+                loader={<p>Loading...</p>}
+            >
+                <div className="flex flex-wrap gap-2 mx-auto justify-center">
+                    {cocktails.map((drink) => <DrinkModal key={drink.id} cocktail={drink} available={ingredients} />)}
+                </div>
+            </InfiniteScroll>
+
         );
     };
 
@@ -130,9 +150,9 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
     };
 
     return (
-        <>
+        <div className="min-h-screen flex flex-col">
             <LoginBar />
-            <div className="min-h-screen flex flex-col gap-2 bg-gradient-to-tr from-red-500 to-yellow-300 py-3 items-center">
+            <div className="flex-grow flex flex-col gap-2 bg-gradient-to-tr from-red-500 to-yellow-300 py-3 items-center">
                 <div className="flex flex-col items-center bg-white rounded-lg w-5/6 md:w-1/2 p-1 text-center">
                     <input
                         type="text"
@@ -150,7 +170,7 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
                 </div>
                 <ShowResults />
             </div>
-        </>
+        </div>
     );
 };
 

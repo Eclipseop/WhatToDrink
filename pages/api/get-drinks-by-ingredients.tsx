@@ -23,7 +23,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return;
     }
 
-    let { ingredients: available } = req.query;
+    let { ingredients: available, idx } = req.query;
+
+    if (Array.isArray(idx)) {
+        idx = idx.join('');
+    }
+    const num = parseInt(idx);
+
     if (!Array.isArray(available)) {
         available = available.split(',');
     }
@@ -36,7 +42,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     data.sort((a, b) => {
         return score(available, b.ingredients) - score(available, a.ingredients);
     });
-    const sorted = data.splice(0, 25);
+
+    const sorted = data.splice(num * 25, 25);
 
     res.status(200).json(sorted);
 };
