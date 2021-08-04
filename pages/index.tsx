@@ -37,12 +37,21 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const prisma = new PrismaClient();
 
     const session = await getSession({ req });
+    if (!session) {
+        return {
+            props: {
+                ingredients: [],
+                favoriteCocktails: [],
+            }
+        };
+    }
+    const { user } = session;
 
     const data = await prisma.userIngredient.findMany({
         where: {
             user: {
                 // @ts-ignore
-                email: session?.email
+                email: user?.email
             }
         }
     });
@@ -50,11 +59,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
         where: {
             user: {
                 // @ts-ignore
-                email: session?.email
+                email: user?.email
             }
         }
     })).map(p => p.cocktailId);
-
 
     const ingredients = data.map(data => data.name);
 
