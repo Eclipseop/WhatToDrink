@@ -12,11 +12,12 @@ generator client {
 }
 
 model Cocktail {
-  id          Int          @id @default(autoincrement())
-  name        String
-  description String
-  image       String
-  ingredients Ingredient[]
+  id           Int            @id @default(autoincrement())
+  name         String
+  description  String
+  image        String
+  ingredients  Ingredient[]
+  UserFavorite UserFavorite[]
 }
 
 model Ingredient {
@@ -32,6 +33,14 @@ model UserIngredient {
   name   String
   user   User?   @relation(fields: [userId], references: [id])
   userId String?
+}
+
+model UserFavorite {
+  int        Int       @id @default(autoincrement())
+  cocktail   Cocktail? @relation(fields: [cocktailId], references: [id])
+  cocktailId Int?
+  user       User?     @relation(fields: [userId], references: [id])
+  userId     String?
 }
 
 model Account {
@@ -72,6 +81,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   ingredients   UserIngredient[]
+  UserFavorite  UserFavorite[]
 }
 
 model VerificationRequest {

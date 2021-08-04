@@ -37,30 +37,49 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const prisma = new PrismaClient();
 
     const session = await getSession({ req });
+    if (!session) {
+        return {
+            props: {
+                ingredients: [],
+                favoriteCocktails: [],
+            }
+        };
+    }
+    const { user } = session;
 
     const data = await prisma.userIngredient.findMany({
         where: {
             user: {
                 // @ts-ignore
-                email: session?.email
+                email: user?.email
             }
         }
     });
+    const favoriteCocktails = (await prisma.userFavorite.findMany({
+        where: {
+            user: {
+                // @ts-ignore
+                email: user?.email
+            }
+        }
+    })).map(p => p.cocktailId);
 
     const ingredients = data.map(data => data.name);
 
     return {
-        props: { ingredients },
+        props: { ingredients, favoriteCocktails },
     };
 };
 
 interface SearchProps {
     ingredients: string[];
+    favoriteCocktails: number[];
 }
 
 
 const Index: React.FC<SearchProps> = (props: SearchProps) => {
     const [ingredients, setIngredients] = useState<string[]>(props.ingredients);
+    const [favoriteCocktails, setFavoriteCocktails] = useState<number[]>(props.favoriteCocktails);
     const [input, setInput] = useState("");
     const [cocktails, setCocktails] = useState<Cocktail[]>([]);
     const [session] = useSession();
@@ -130,7 +149,15 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
                 loader={<p>Loading...</p>}
             >
                 <div className="flex flex-wrap gap-2 mx-auto justify-center">
-                    {cocktails.map((drink) => <DrinkModal key={drink.id} cocktail={drink} available={ingredients} />)}
+                    {cocktails.map((drink) =>
+                        <DrinkModal
+                            key={drink.id}
+                            cocktail={drink}
+                            available={ingredients}
+                            favorites={favoriteCocktails}
+                            addFavorite={(e) => setFavoriteCocktails(favoriteCocktails.concat([e]))}
+                            removeFavorite={(e) => setFavoriteCocktails(favoriteCocktails.filter(i => i !== e))}
+                        />)}
                 </div>
             </InfiniteScroll>
 
