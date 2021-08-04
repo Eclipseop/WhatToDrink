@@ -27,21 +27,14 @@ const DrinkModal: React.FC<Props> = (props: Props) => {
     const [session] = useSession();
 
     const submitAddFavorite = () => {
-        try {
-            addFavorite(cocktail.id);
-            axios.post('/api/add-favorite', { cocktail: cocktail.id });
-        } catch (error) {
-            console.error(error);
-        }
+        addFavorite(cocktail.id);
+        axios.post('/api/add-favorite', { cocktail: cocktail.id }).catch(err => console.error(err));
+
     };
 
     const submitRemoveFavorite = () => {
-        try {
-            removeFavorite(cocktail.id);
-            axios.post('/api/remove-favorite', { cocktail: cocktail.id });
-        } catch (error) {
-            console.error(error);
-        }
+        removeFavorite(cocktail.id);
+        axios.post('/api/remove-favorite', { cocktail: cocktail.id }).catch(err => console.error(err));
     };
 
     const isFavorite = (): boolean => {

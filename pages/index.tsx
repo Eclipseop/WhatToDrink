@@ -103,11 +103,7 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
         setIngredients(newIngredients);
 
         if (!session) return;
-        try {
-            axios.post('/api/add-ingredient-to-account', { ingredient });
-        } catch (err) {
-            console.error(err);
-        }
+        axios.post('/api/add-ingredient-to-account', { ingredient }).catch(err => console.error(err));
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -124,11 +120,7 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
         setIngredients(newIngredients);
 
         if (!session) return;
-        try {
-            axios.post('/api/remove-ingredient-from-account', { ingredient });
-        } catch (err) {
-            console.error(err);
-        }
+        axios.post('/api/remove-ingredient-from-account', { ingredient }).catch(err => console.error(err));
     };
 
     const fetchMore = async () => {
