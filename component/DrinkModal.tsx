@@ -6,13 +6,14 @@ import { useSession } from 'next-auth/client';
 
 interface Props {
     cocktail: Cocktail;
-    available: string[];
+    available?: string[];
     favorites: number[];
-    addFavorite: (id: number) => void;
-    removeFavorite: (id: number) => void;
+    addFavorite?: (id: number) => void;
+    removeFavorite?: (id: number) => void;
 }
 
-const has = (available: string[], ingredient: Ingredient): boolean => {
+const has = (available: string[] | undefined, ingredient: Ingredient): boolean => {
+    if (!available) return false;
     for (const avail of available) {
         const ing = ingredient.name.toLowerCase();
         const avail1 = avail.toLowerCase();
@@ -27,12 +28,14 @@ const DrinkModal: React.FC<Props> = (props: Props) => {
     const [session] = useSession();
 
     const submitAddFavorite = () => {
+        if (!addFavorite) return;
         addFavorite(cocktail.id);
         axios.post('/api/add-favorite', { cocktail: cocktail.id }).catch(err => console.error(err));
 
     };
 
     const submitRemoveFavorite = () => {
+        if (!removeFavorite) return;
         removeFavorite(cocktail.id);
         axios.post('/api/remove-favorite', { cocktail: cocktail.id }).catch(err => console.error(err));
     };

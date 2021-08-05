@@ -76,7 +76,6 @@ interface SearchProps {
     favoriteCocktails: number[];
 }
 
-
 const Index: React.FC<SearchProps> = (props: SearchProps) => {
     const [ingredients, setIngredients] = useState<string[]>(props.ingredients);
     const [favoriteCocktails, setFavoriteCocktails] = useState<number[]>(props.favoriteCocktails);
@@ -89,6 +88,7 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
         const fetch = async () => {
             if (ingredients.length === 0) return;
             const { data } = await axios.get<Cocktail[]>(generateURL(ingredients, pageIdx));
+            //setCocktails([]);
             setCocktails(data);
         };
         fetch();
@@ -99,7 +99,6 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
         if (ingredient.length === 0) return;
         const newIngredients = ingredients.concat([ingredient]);
         setPageIdx(0);
-        setCocktails([]);
         setIngredients(newIngredients);
 
         if (!session) return;
@@ -116,7 +115,6 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
     const removeIngredient = (ingredient: string) => {
         const newIngredients = ingredients.filter(i => i !== ingredient);
         setPageIdx(0);
-        setCocktails([]);
         setIngredients(newIngredients);
 
         if (!session) return;
