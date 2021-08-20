@@ -21,7 +21,7 @@
     "react-infinite-scroll-component": "^6.1.0"
   },
   "devDependencies": {
-    "@types/react": "^17.0.15",
+    "@types/react": "^17.0.19",
     "@typescript-eslint/eslint-plugin": "^4.28.5",
     "@typescript-eslint/parser": "^4.28.5",
     "autoprefixer": "^10.3.1",
