@@ -62,7 +62,7 @@ const DrinkModal: React.FC<Props> = (props: Props) => {
                         <img className="rounded w-full h-full" src={cocktail.image + '/preview'} alt={cocktail.name} />
                     </div>
                     <div className="flex flex-col flex-grow">
-                        <a className="font-semibold" href={`/drink/${cocktail.id}`}>{cocktail.name}</a>
+                        <a className="font-semibold transition delay-75 ease-out hover:text-yellow-500" href={`/drink/${cocktail.id}`}>{cocktail.name}</a>
                         <p className="text-gray-500 text-xs">{desc()}</p>
                     </div>
                     <svg
