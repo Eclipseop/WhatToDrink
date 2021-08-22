@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useSession, getSession } from 'next-auth/client';
 import { GetServerSideProps } from 'next';
 import { PrismaClient } from '@prisma/client';
-import LoginBar from '../component/LoginBar';
+import Header from '../component/Header';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 export const fetcher = (url: string): Promise<Cocktail[]> => fetch(url).then(res => res.json());
@@ -138,7 +138,7 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
                 hasMore={true}
                 loader={<p>Loading...</p>}
             >
-                <div className="flex flex-wrap gap-2 mx-auto justify-center">
+                <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-items-center w-5/6 mx-auto gap-2">
                     {cocktails.map((drink) =>
                         <DrinkModal
                             key={drink.id}
@@ -147,7 +147,8 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
                             favorites={favoriteCocktails}
                             addFavorite={(e) => setFavoriteCocktails(favoriteCocktails.concat([e]))}
                             removeFavorite={(e) => setFavoriteCocktails(favoriteCocktails.filter(i => i !== e))}
-                        />)}
+                        />
+                    )}
                 </div>
             </InfiniteScroll>
 
@@ -168,7 +169,7 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
 
     return (
         <div className="min-h-screen flex flex-col">
-            <LoginBar />
+            <Header />
             <div className="flex-grow flex flex-col gap-2 bg-gradient-to-tr from-red-500 to-yellow-300 py-3 items-center">
                 <div className="flex flex-col items-center bg-white rounded-lg w-5/6 md:w-1/2 p-1 text-center">
                     <input

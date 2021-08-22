@@ -10,10 +10,11 @@ interface Props {
     favorites: number[];
     addFavorite?: (id: number) => void;
     removeFavorite?: (id: number) => void;
+    displayFullDesc?: boolean;
 }
 
 const has = (available: string[] | undefined, ingredient: Ingredient): boolean => {
-    if (!available) return false;
+    if (!available) return true;
     for (const avail of available) {
         const ing = ingredient.name.toLowerCase();
         const avail1 = avail.toLowerCase();
@@ -24,7 +25,7 @@ const has = (available: string[] | undefined, ingredient: Ingredient): boolean =
 };
 
 const DrinkModal: React.FC<Props> = (props: Props) => {
-    const { cocktail, available, favorites, addFavorite, removeFavorite } = props;
+    const { cocktail, available, favorites, addFavorite, removeFavorite, displayFullDesc } = props;
     const [session] = useSession();
 
     const submitAddFavorite = () => {
@@ -48,16 +49,21 @@ const DrinkModal: React.FC<Props> = (props: Props) => {
         return false;
     };
 
+    const desc = (): string => {
+        if (displayFullDesc) return cocktail.description;
+        return cocktail.description.length > 130 ? cocktail.description.substring(0, 120) + '...' : cocktail.description;
+    };
+
     return (
-        <div className="bg-white rounded-md p-1 h-auto w-5/6 md:w-1/4 xl:w-1/6 transition delay-75 ease-out hover:shadow-xl">
+        <div className="bg-white rounded-md p-1 w-full transition delay-75 ease-out hover:shadow-xl">
             <div className="flex flex-col gap-1">
                 <div className="flex gap-1 flex-col md:flex-row items-start">
                     <div className="h-24 w-24 md:h-12 md:w-12 flex-none">
                         <img className="rounded w-full h-full" src={cocktail.image + '/preview'} alt={cocktail.name} />
                     </div>
                     <div className="flex flex-col flex-grow">
-                        <h1 className="font-semibold">{cocktail.name}</h1>
-                        <p className="text-gray-500 text-xs">{cocktail.description}</p>
+                        <a className="font-semibold" href={`/drink/${cocktail.id}`}>{cocktail.name}</a>
+                        <p className="text-gray-500 text-xs">{desc()}</p>
                     </div>
                     <svg
                         onClick={() => session ? (isFavorite() ? submitRemoveFavorite() : submitAddFavorite()) : alert('Please login to add favorites.')}
