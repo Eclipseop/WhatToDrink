@@ -3,6 +3,7 @@ import DrinkModal from '../component/DrinkModal';
 import axios from 'axios';
 import { useSession, getSession } from 'next-auth/client';
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import { PrismaClient } from '@prisma/client';
 import Header from '../component/Header';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -169,6 +170,11 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
 
     return (
         <div className="min-h-screen flex flex-col">
+            <Head>
+                <title>Home | WhatToDrink</title>
+                <meta property="og:title" content="Home | WhatToDrink" key="title" />
+                <meta name="description" content="WhatToDrink is the best way to find new drinks! Input ingredients and see what you can make!" />
+            </Head>
             <Header />
             <div className="flex-grow flex flex-col gap-2 bg-gradient-to-tr from-red-500 to-yellow-300 py-3 items-center">
                 <div className="flex flex-col items-center bg-white rounded-lg w-5/6 md:w-1/2 p-1 text-center">
