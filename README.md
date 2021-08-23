@@ -3,6 +3,8 @@
 Given a list of ingredients, outputs various cocktails that could be made, while also highlighting the missing ingredients.
 
 ## Development
+Requirements: [Postgres](https://hub.docker.com/_/postgres)
+
 Starting up the development server
 ```
 yarn install
