@@ -14,3 +14,5 @@ Enviroment Variables
 * GITHUB_CLIENT_SECRET
 * NEXTAUTH_URL
 * DATABASE_URL
+
+**IMPORTANT:** Be sure to checkout the [parser](parser/README.md) to fill the database.
