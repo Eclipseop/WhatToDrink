@@ -162,7 +162,7 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
                 <div className="w-1/4 max-w-[14rem] flex-none">
                     <Sidebar shrink={shrink} ingredients={ingredients} addIngredient={addIngredient} removeIngredient={removeIngredient} />
                 </div>
-                <div className="bg-gradient-to-tr from-red-500 to-yellow-300 py-3">
+                <div className="flex-grow bg-gradient-to-tr from-red-500 to-yellow-300 py-3">
                     <ShowResults />
                 </div>
             </div>
