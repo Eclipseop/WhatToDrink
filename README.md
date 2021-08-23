@@ -15,4 +15,4 @@ Enviroment Variables
 * NEXTAUTH_URL
 * DATABASE_URL
 
-**IMPORTANT:** Be sure to checkout the [parser](parser/README.md) to fill the database.
+**IMPORTANT:** Be sure to checkout the [parser](parser/) to fill the database.
