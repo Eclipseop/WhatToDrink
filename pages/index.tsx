@@ -7,6 +7,7 @@ import Head from 'next/head';
 import { PrismaClient } from '@prisma/client';
 import Header from '../component/Header';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import Sidebar from '../component/Sidebar';
 
 export const fetcher = (url: string): Promise<Cocktail[]> => fetch(url).then(res => res.json());
 
@@ -80,10 +81,10 @@ interface SearchProps {
 const Index: React.FC<SearchProps> = (props: SearchProps) => {
     const [ingredients, setIngredients] = useState<string[]>(props.ingredients);
     const [favoriteCocktails, setFavoriteCocktails] = useState<number[]>(props.favoriteCocktails);
-    const [input, setInput] = useState("");
     const [cocktails, setCocktails] = useState<Cocktail[]>([]);
     const [session] = useSession();
     const [pageIdx, setPageIdx] = useState(0);
+    const [shrink, setShrink] = useState(true);
 
     useEffect(() => {
         const fetch = async () => {
@@ -104,13 +105,6 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
 
         if (!session) return;
         axios.post('/api/add-ingredient-to-account', { ingredient }).catch(err => console.error(err));
-    };
-
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === "Enter") {
-            addIngredient(input);
-            setInput("");
-        }
     };
 
     const removeIngredient = (ingredient: string) => {
@@ -156,18 +150,6 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
         );
     };
 
-    interface Props {
-        ingredient: string;
-        remove: () => void;
-    }
-
-    const SearchInput: React.FC<Props> = (props: Props) => {
-        const { ingredient, remove } = props;
-        return (
-            <li onClick={() => remove()} className="hover:line-through text-gray-600">{ingredient}</li>
-        );
-    };
-
     return (
         <div className="min-h-screen flex flex-col">
             <Head>
@@ -176,23 +158,13 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
                 <meta name="description" content="WhatToDrink is the best way to find new drinks! Input ingredients and see what you can make!" />
             </Head>
             <Header />
-            <div className="flex-grow flex flex-col gap-2 bg-gradient-to-tr from-red-500 to-yellow-300 py-3 items-center">
-                <div className="flex flex-col items-center bg-white rounded-lg w-5/6 md:w-1/2 p-1 text-center">
-                    <input
-                        type="text"
-                        placeholder="Add ingredients"
-                        className="border rounded p-1 transition-width ease-out delay-100 w-1/2 focus:w-5/6 focus:outline-none text-center"
-                        value={input}
-                        onChange={e => setInput(e.target.value)}
-                        onKeyDown={(e) => handleKeyDown(e)}
-                    />
-                    <ul>
-                        {ingredients.map((ingredient) => (
-                            <SearchInput ingredient={ingredient} remove={() => removeIngredient(ingredient)} key={ingredient} />
-                        ))}
-                    </ul>
+            <div className="flex flex-row flex-1">
+                <div className="w-1/4 max-w-[14rem] flex-none">
+                    <Sidebar shrink={shrink} ingredients={ingredients} addIngredient={addIngredient} removeIngredient={removeIngredient} />
                 </div>
-                <ShowResults />
+                <div className="bg-gradient-to-tr from-red-500 to-yellow-300 py-3">
+                    <ShowResults />
+                </div>
             </div>
         </div>
     );
