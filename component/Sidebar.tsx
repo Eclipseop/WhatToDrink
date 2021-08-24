@@ -55,7 +55,7 @@ const Sidebar = (props: Props) => {
 
             <div className="flex-col font-light">
                 <div className="flex items-center gap-1" onClick={() => setActive('ingredients')}>
-                    <FontAwesomeIcon icon={faCoffee} />
+                    <FontAwesomeIcon icon={faCoffee} className="h-[16px]" />
                     <h1>Ingredients</h1>
                 </div>
                 {
