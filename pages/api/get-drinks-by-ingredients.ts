@@ -9,7 +9,7 @@ const score = (available: string[] | string, required: Ingredient[]): number => 
     let temp = 0;
     for (const ingredient of required) {
         for (const avail of available) {
-            if (ingredient.name.toLowerCase().includes(avail.toLowerCase())) {
+            if (ingredient.name.toLowerCase() === avail.toLowerCase()) {
                 temp++;
             }
         }

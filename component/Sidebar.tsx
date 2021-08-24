@@ -3,16 +3,9 @@ import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { signIn, signOut, useSession } from 'next-auth/client';
 import Image from 'next/image';
-
-const popularIngredients = [
-    "Rum",
-    "Gin",
-    "Vodka",
-    "Tequila",
-    "Whiskey",
-    "Scotch",
-    "Brandy",
-];
+// @ts-ignore
+import { ReactSearchAutocomplete } from 'react-search-autocomplete';
+import searchIngredients from './ingredients';
 
 interface Props {
     shrink: boolean;
@@ -21,19 +14,11 @@ interface Props {
     removeIngredient: (ingredient: string) => void;
 }
 
+
 const Sidebar = (props: Props) => {
     const [active, setActive] = useState('ingredients');
-    const [textbox, setTextbox] = useState('');
     const { shrink, ingredients, addIngredient, removeIngredient } = props;
     const [session] = useSession();
-
-    useEffect(() => {
-        for (const i of ingredients) {
-            if (!popularIngredients.includes(i)) {
-                popularIngredients.push(i);
-            }
-        }
-    }, [ingredients]);
 
     const handleCheckboxClick = (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.checked;
@@ -41,14 +26,6 @@ const Sidebar = (props: Props) => {
             addIngredient(e.target.id);
         } else {
             removeIngredient(e.target.id);
-        }
-    };
-
-    const handleCustomIngredient = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter") {
-            addIngredient(textbox);
-            setTextbox('');
-            popularIngredients.push(textbox);
         }
     };
 
@@ -80,10 +57,22 @@ const Sidebar = (props: Props) => {
                 </div>
                 {
                     active === 'ingredients' ?
-                        <div>
-                            <input type="text" className="border rounded focus:outline-none w-5/6" placeholder="Custom Ingredient" value={textbox} onChange={(e) => setTextbox(e.target.value)} onKeyDown={(e) => handleCustomIngredient(e)}></input>
+                        <div className="w-11/12">
+                            <ReactSearchAutocomplete
+                                items={searchIngredients}
+                                onSelect={(e: any) => addIngredient(e.name)}
+                                autoFocus
+                                styling={{
+                                    border: '1px solid #9CA38F',
+                                    borderRadius: '6px',
+                                    boxShadow: 'none',
+                                    height: '28px',
+                                    searchIconMargin: '3px',
+                                    clearIconMargin: "3px"
+                                }}
+                            />
                             {
-                                popularIngredients.map(ingredient => (
+                                ingredients.map(ingredient => (
                                     <div key={ingredient} >
                                         <label htmlFor={ingredient}><input type="checkbox" id={ingredient} name={ingredient} onChange={(e) => handleCheckboxClick(e)} checked={ingredients.includes(ingredient)}/> {ingredient} </label>
                                     </div>
