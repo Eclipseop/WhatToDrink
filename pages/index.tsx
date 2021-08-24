@@ -5,7 +5,6 @@ import { useSession, getSession } from 'next-auth/client';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import prisma from '../prisma/db';
-import Header from '../component/Header';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Sidebar from '../component/Sidebar';
 
@@ -163,7 +162,6 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
                 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
                 <meta name="theme-color" content="#ffffff" />
             </Head>
-            <Header />
             <div className="flex flex-row flex-1">
                 <div className="w-1/4 max-w-[14rem] flex-none">
                     <Sidebar shrink={shrink} ingredients={ingredients} addIngredient={addIngredient} removeIngredient={removeIngredient} />

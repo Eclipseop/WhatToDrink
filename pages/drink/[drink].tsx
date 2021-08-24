@@ -3,7 +3,6 @@ import React from 'react';
 import useSWR from 'swr';
 import { Cocktail } from '..';
 import DrinkModal from '../../component/DrinkModal';
-import Header from '../../component/Header';
 import Head from 'next/head';
 
 const fetcher = (url: string): Promise<Cocktail> => fetch(url).then(res => res.json());
@@ -22,7 +21,6 @@ const Drink = () => {
                 <title>{data.name} | WhatToDrink</title>
                 <meta property="og:title" content="Home | WhatToDrink" key="title" />
             </Head>
-            <Header />
             <div className="m-auto w-1/2">
                 <DrinkModal cocktail={data} favorites={[]} displayFullDesc={true} />
             </div>
