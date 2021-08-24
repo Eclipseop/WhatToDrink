@@ -1,8 +1,9 @@
 /* eslint-disable import/no-anonymous-default-export */
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { Ingredient, PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import { Ingredient } from '@prisma/client';
+import prisma from '../../prisma/db';
+
 
 const score = (available: string[] | string, required: Ingredient[]): number => {
     let temp = 0;
@@ -45,5 +46,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const sorted = data.splice(num * 25, 25);
 
+    console.log(`Sending to drinks on page ${idx} for ingredients ${available}`);
     res.status(200).json(sorted);
 };

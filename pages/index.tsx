@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useSession, getSession } from 'next-auth/client';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../prisma/db';
 import Header from '../component/Header';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Sidebar from '../component/Sidebar';
@@ -36,7 +36,7 @@ const generateURL = (ingredients: string[], pageIdx: number): string => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-    const prisma = new PrismaClient();
+    //const prisma = new PrismaClient();
 
     const session = await getSession({ req });
     if (!session) {
@@ -130,7 +130,7 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
             <InfiniteScroll
                 dataLength={cocktails.length}
                 next={fetchMore}
-                hasMore={true}
+                hasMore={cocktails.length < 621}
                 loader={<p>Loading...</p>}
             >
                 <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-items-center w-5/6 mx-auto gap-2">
