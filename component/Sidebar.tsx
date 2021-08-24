@@ -55,7 +55,7 @@ const Sidebar = (props: Props) => {
     const avatar = session?.user?.image;
 
     return (
-        <div className="pl-1 flex-col">
+        <div className="pl-1 flex-col sticky top-0">
             <h1 className="font-semibold text-center">What to Drink</h1>
 
             <div className="flex-col font-light">
@@ -65,7 +65,7 @@ const Sidebar = (props: Props) => {
                             <div>
                                 <Image src={avatar ?? ''} className="rounded-full" alt="avatar" width="100px" height="100px" />
                             </div>
-                            <button onClick={() => signOut()}>Sign Out</button>
+                            <button className="leading-none" onClick={() => signOut()}>Sign Out</button>
                         </>
                     ) : (
                         <>
@@ -81,7 +81,7 @@ const Sidebar = (props: Props) => {
                 {
                     active === 'ingredients' ?
                         <div>
-                            <input type="text" className="border rounded focus:outline-none" placeholder="Custom Ingredient" value={textbox} onChange={(e) => setTextbox(e.target.value)} onKeyDown={(e) => handleCustomIngredient(e)}></input>
+                            <input type="text" className="border rounded focus:outline-none w-5/6" placeholder="Custom Ingredient" value={textbox} onChange={(e) => setTextbox(e.target.value)} onKeyDown={(e) => handleCustomIngredient(e)}></input>
                             {
                                 popularIngredients.map(ingredient => (
                                     <div key={ingredient} >
