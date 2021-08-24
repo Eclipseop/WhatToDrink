@@ -132,7 +132,7 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
                 hasMore={cocktails.length < 621}
                 loader={<p>Loading...</p>}
             >
-                <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-items-center w-5/6 mx-auto gap-3">
+                <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-items-center w-11/12 mx-auto gap-3">
                     {cocktails.map((drink) =>
                         <DrinkModal
                             key={drink.id}
