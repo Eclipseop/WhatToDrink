@@ -9,7 +9,7 @@ import Image from 'next/image';
 interface Props {
     cocktail: Cocktail;
     available?: string[];
-    favorites: number[];
+    favorites?: number[];
     addFavorite?: (id: number) => void;
     removeFavorite?: (id: number) => void;
     displayFullDesc?: boolean;
@@ -43,6 +43,7 @@ const DrinkModal: React.FC<Props> = ({ cocktail, available, favorites, addFavori
     };
 
     const isFavorite = (): boolean => {
+        if (!favorites) return false;
         for (const fav of favorites) {
             if (fav === cocktail.id) return true;
         }

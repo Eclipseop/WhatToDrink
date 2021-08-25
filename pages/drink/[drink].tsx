@@ -22,7 +22,7 @@ const Drink = () => {
                 <meta property="og:title" content="Home | WhatToDrink" key="title" />
             </Head>
             <div className="m-auto w-1/2">
-                <DrinkModal cocktail={data} favorites={[]} displayFullDesc={true} />
+                <DrinkModal cocktail={data} displayFullDesc={true} />
             </div>
         </div>
     );
