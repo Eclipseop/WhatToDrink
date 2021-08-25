@@ -15,9 +15,8 @@ interface Props {
 }
 
 
-const Sidebar = (props: Props) => {
+const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient }: Props) => {
     const [active, setActive] = useState('ingredients');
-    const { shrink, ingredients, addIngredient, removeIngredient } = props;
     const [session] = useSession();
 
     const handleCheckboxClick = (e: React.ChangeEvent<HTMLInputElement>) => {
