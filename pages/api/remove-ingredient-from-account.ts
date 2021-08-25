@@ -32,5 +32,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             name: ingredient
         }
     });
-    res.json(data);
+    res.status(200).json(data);
 };

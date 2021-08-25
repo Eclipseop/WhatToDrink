@@ -34,5 +34,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }
         }
     });
-    res.json(data);
+    res.status(200).json(data);
 };
