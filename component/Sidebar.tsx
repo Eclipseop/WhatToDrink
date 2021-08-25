@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { signIn, signOut, useSession } from 'next-auth/client';
@@ -6,6 +6,7 @@ import Image from 'next/image';
 // @ts-ignore
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import searchIngredients from './ingredients';
+import Link from 'next/link';
 
 interface Props {
     shrink: boolean;
@@ -13,7 +14,6 @@ interface Props {
     addIngredient: (ingredient: string) => void;
     removeIngredient: (ingredient: string) => void;
 }
-
 
 const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient }: Props) => {
     const [active, setActive] = useState('ingredients');
@@ -31,11 +31,11 @@ const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient }: Props
     const avatar = session?.user?.image;
 
     return (
-        <div className="pl-1 flex-col sticky top-0">
+        <div className="pl-1 h-screen flex flex-col sticky top-0">
             <h1 className="font-semibold text-center">What to Drink</h1>
 
-            <div className="flex-col font-light">
-                <div className="flex flex-col items-center">
+            <div className="font-light flex-grow">
+                <div className="flex flex-col flex-grow items-center">
                     {session ? (
                         <>
                             <div>
@@ -59,7 +59,8 @@ const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient }: Props
                         <div className="w-11/12">
                             <ReactSearchAutocomplete
                                 items={searchIngredients}
-                                onSelect={(e: any) => addIngredient(e.name)}
+                                //addIngredient(e.name)
+                                onSelect={(e: {name: string, id: number}) => console.log(e)}
                                 autoFocus
                                 styling={{
                                     border: '1px solid #9CA38F',
@@ -82,7 +83,10 @@ const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient }: Props
                         null
                 }
             </div>
-            
+            <footer className="flex justify-center gap-2">
+                <Link href="/privacy-policy">Privacy Policy</Link>
+                <a className="text-center" href="https://github.com/Eclipseop/WhatToDrink" target="_blank" rel="noreferrer">Github</a>
+            </footer>
         </div>
     );
 };
