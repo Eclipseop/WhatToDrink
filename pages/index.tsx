@@ -77,7 +77,7 @@ interface SearchProps {
     favoriteCocktails: number[];
 }
 
-const Index: React.FC<SearchProps> = (props: SearchProps) => {
+const Index = (props: SearchProps) => {
     const [ingredients, setIngredients] = useState<string[]>(props.ingredients);
     const [favoriteCocktails, setFavoriteCocktails] = useState<number[]>(props.favoriteCocktails);
     const [cocktails, setCocktails] = useState<Cocktail[]>([]);
@@ -122,7 +122,7 @@ const Index: React.FC<SearchProps> = (props: SearchProps) => {
         setCocktails(newArr);
     };
 
-    const ShowResults: React.FC = () => {
+    const ShowResults = () => {
         if (cocktails.length === 0) return null;
 
         return (

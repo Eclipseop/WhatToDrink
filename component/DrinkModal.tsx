@@ -26,7 +26,7 @@ const has = (available: string[] | undefined, ingredient: Ingredient): boolean =
     return false;
 };
 
-const DrinkModal: React.FC<Props> = ({ cocktail, available, favorites, addFavorite, removeFavorite, displayFullDesc }: Props) => {
+const DrinkModal = ({ cocktail, available, favorites, addFavorite, removeFavorite, displayFullDesc }: Props) => {
     const [session] = useSession();
 
     const submitAddFavorite = () => {
