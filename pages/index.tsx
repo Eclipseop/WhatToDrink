@@ -35,8 +35,6 @@ const generateURL = (ingredients: string[], pageIdx: number): string => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-    //const prisma = new PrismaClient();
-
     const session = await getSession({ req });
     if (!session) {
         return {
@@ -51,7 +49,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const data = await prisma.userIngredient.findMany({
         where: {
             user: {
-                // @ts-ignore
                 email: user?.email
             }
         }
@@ -59,7 +56,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const favoriteCocktails = (await prisma.userFavorite.findMany({
         where: {
             user: {
-                // @ts-ignore
                 email: user?.email
             }
         }
@@ -89,7 +85,6 @@ const Index = (props: SearchProps) => {
         const fetch = async () => {
             if (ingredients.length === 0) return;
             const { data } = await axios.get<Cocktail[]>(generateURL(ingredients, pageIdx));
-            //setCocktails([]);
             setCocktails(data);
         };
         fetch();

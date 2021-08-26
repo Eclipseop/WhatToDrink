@@ -18,6 +18,7 @@ interface Props {
 const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient }: Props) => {
     const [active, setActive] = useState('ingredients');
     const [session] = useSession();
+    const avatar = session?.user?.image;
 
     const handleCheckboxClick = (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.checked;
@@ -28,7 +29,32 @@ const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient }: Props
         }
     };
 
-    const avatar = session?.user?.image;
+    const IngredientsSection = () => {
+        return (
+            <>
+                <ReactSearchAutocomplete
+                    items={searchIngredients}
+                    onSelect={(e: {name: string, id: number}) => addIngredient(e.name)}
+                    autoFocus
+                    styling={{
+                        border: '1px solid #9CA38F',
+                        borderRadius: '6px',
+                        boxShadow: 'none',
+                        height: '28px',
+                        searchIconMargin: '3px',
+                        clearIconMargin: "3px"
+                    }}
+                />
+                {
+                    ingredients.map(ingredient => (
+                        <div key={ingredient} >
+                            <label htmlFor={ingredient}><input type="checkbox" id={ingredient} name={ingredient} onChange={(e) => handleCheckboxClick(e)} checked={ingredients.includes(ingredient)}/> {ingredient} </label>
+                        </div>
+                    ))
+                }
+            </>
+        );
+    };
 
     return (
         <div className="pl-1 h-screen flex flex-col sticky top-0">
@@ -54,33 +80,10 @@ const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient }: Props
                     <FontAwesomeIcon icon={faCoffee} className="h-[16px]" />
                     <h1>Ingredients</h1>
                 </div>
-                {
-                    active === 'ingredients' ?
-                        <div className="w-11/12">
-                            <ReactSearchAutocomplete
-                                items={searchIngredients}
-                                onSelect={(e: {name: string, id: number}) => addIngredient(e.name)}
-                                autoFocus
-                                styling={{
-                                    border: '1px solid #9CA38F',
-                                    borderRadius: '6px',
-                                    boxShadow: 'none',
-                                    height: '28px',
-                                    searchIconMargin: '3px',
-                                    clearIconMargin: "3px"
-                                }}
-                            />
-                            {
-                                ingredients.map(ingredient => (
-                                    <div key={ingredient} >
-                                        <label htmlFor={ingredient}><input type="checkbox" id={ingredient} name={ingredient} onChange={(e) => handleCheckboxClick(e)} checked={ingredients.includes(ingredient)}/> {ingredient} </label>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                        :
-                        null
-                }
+                <div className="w-11/12">
+                    <IngredientsSection />
+                    <p className="text-lg">Show favorites</p>
+                </div>
             </div>
             <footer className="flex justify-center gap-2">
                 <Link href="/privacy-policy">Privacy Policy</Link>
