@@ -1,10 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { Cocktail, Ingredient, UserFavoriteCocktail } from '../pages';
 import axios from 'axios';
 import { useSession } from 'next-auth/client';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Image from 'next/image';
 
 interface Props {
     cocktail: Cocktail;
@@ -71,7 +71,7 @@ const DrinkModal = ({ cocktail, available, favorites, addFavorite, removeFavorit
             <div className="flex flex-col gap-1">
                 <div className="flex gap-1 flex-col md:flex-row items-start">
                     <div className="h-24 w-24 md:h-12 md:w-12 flex-none">
-                        <Image src={cocktail.image + '/preview'} alt={cocktail.name} width={100} height={100} className="rounded" />
+                        <img src={cocktail.image + '/preview'} alt={cocktail.name} width={100} height={100} className="rounded" />
                     </div>
                     <div className="flex flex-col flex-grow">
                         <a className="font-semibold transition delay-75 ease-out hover:text-yellow-500" href={`/drink/${cocktail.id}`}>{cocktail.name}</a>
