@@ -11,16 +11,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return;
     }
 
+    const session = await getSession({ req });
+    if (!session) {
+        res.status(401).send('Unauthorized');
+        return;
+    }
 
     const { ingredient } = req.body;
     if (Array.isArray(ingredient)) {
         res.status(400).send('Invalid query');
-        return;
-    }
-
-    const session = await getSession({ req });
-    if (!session) {
-        res.status(401).send('Unauthorized');
         return;
     }
 
@@ -29,8 +28,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             name: ingredient,
             user: {
                 connect: {
-                    // @ts-ignore
-                    email: session.user?.email
+                    email: session.user?.email ?? undefined
                 }
             }
         }

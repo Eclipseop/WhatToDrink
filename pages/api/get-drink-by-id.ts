@@ -10,13 +10,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const { drinkId } = req.query;
     if (!drinkId) {
-        console.log('Sening nothing');
         res.status(400).send('Drink id is required');
         return;
     }
+
     const data = await prisma.cocktail.findFirst({
         where: {
-            //@ts-ignore
             id: +drinkId,
         },
         include: {

@@ -10,6 +10,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return;
     }
 
+    const session = await getSession({ req });
+    if (!session) {
+        res.status(401).send('Unauthorized');
+        return;
+    }
 
     const { ingredient } = req.body;
     if (Array.isArray(ingredient)) {
@@ -17,17 +22,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return;
     }
 
-    const session = await getSession({ req });
-    if (!session) {
-        res.status(401).send('Unauthorized');
-        return;
-    }
-
     const data = await prisma.userIngredient.deleteMany({
         where: {
             user: {
-                // @ts-ignore
-                email: session?.email
+                email: session.user?.email,
             },
             name: ingredient
         }

@@ -10,6 +10,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return;
     }
 
+    const session = await getSession({ req });
+    if (!session) {
+        res.status(401).send('Unauthorized');
+        return;
+    }
 
     const { cocktail } = req.body;
     if (Array.isArray(cocktail)) {
@@ -17,23 +22,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return;
     }
 
-    const session = await getSession({ req });
-    if (!session) {
-        res.status(401).send('Unauthorized');
-        return;
-    }
-
     const data = await prisma.userFavorite.create({
         data: {
             user: {
                 connect: {
-                    // @ts-ignore
-                    email: session.user.email,
+                    email: session.user?.email ?? undefined,
                 }
             },
             cocktail: {
                 connect: {
-                    // @ts-ignore
                     id: cocktail,
                 }
             }

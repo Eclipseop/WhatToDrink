@@ -24,12 +24,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return;
     }
 
-    // eslint-disable-next-line prefer-const
-    let { ingredients: available, idx } = req.query;
+    const { idx } = req.query;
     const num = idx ? parseInt(idx as string) : 0;
+    let { ingredients } = req.query;
 
-    if (!Array.isArray(available)) {
-        available = available.split(',');
+    if (!Array.isArray(ingredients)) {
+        ingredients = ingredients.split(',');
     }
 
     const data = await prisma.cocktail.findMany({
@@ -38,11 +38,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         }
     });
     data.sort((a, b) => {
-        return score(available, b.ingredients) - score(available, a.ingredients);
+        return score(ingredients, b.ingredients) - score(ingredients, a.ingredients);
     });
 
     const sorted = data.splice(num * 25, 25);
 
-    console.log(`Sending to drinks on page ${idx} for ingredients ${available}`);
+    console.log(`Sending to drinks on page ${idx} for ingredients ${ingredients}`);
     res.status(200).json(sorted);
 };
