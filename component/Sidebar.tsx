@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { faCoffee } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { signIn, signOut, useSession } from 'next-auth/client';
 import Image from 'next/image';
@@ -17,7 +17,7 @@ interface Props {
     setShowFavorites: (showFavorites: boolean) => void;
 }
 
-const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient }: Props) => {
+const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient, showFavorites, setShowFavorites }: Props) => {
     const [session] = useSession();
     const avatar = session?.user?.image;
 
@@ -32,7 +32,11 @@ const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient }: Props
 
     const IngredientsSection = () => {
         return (
-            <>
+            <div className="mt-6">
+                <div className="flex flex-row items-center gap-1">
+                    <FontAwesomeIcon icon={faCoffee} className="h-[16px]" />
+                    <h1>Ingredients</h1>
+                </div>
                 <ReactSearchAutocomplete
                     items={searchIngredients}
                     onSelect={(e: {name: string, id: number}) => addIngredient(e.name)}
@@ -53,7 +57,19 @@ const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient }: Props
                         </div>
                     ))
                 }
-            </>
+            </div>
+        );
+    };
+
+    const FavoritesSection = () => {
+        return (
+            <div className="mt-6">
+                <div className="flex flex-row items-center gap-1">
+                    <FontAwesomeIcon icon={faStar} className="h-[16px]" />
+                    <h1>Favorites</h1>
+                </div>
+                <label htmlFor="favorite"><input type="checkbox" id="favorite" name="favorite" onChange={() => setShowFavorites(!showFavorites)} checked={showFavorites}/> Show Only Favorites</label>
+            </div>
         );
     };
 
@@ -77,13 +93,9 @@ const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient }: Props
                         </>
                     )}
                 </div>
-                <div className="mt-5 flex items-center gap-1">
-                    <FontAwesomeIcon icon={faCoffee} className="h-[16px]" />
-                    <h1>Ingredients</h1>
-                </div>
-                <div className="w-11/12">
+                <div className="w-11/12 flex flex-col">
                     <IngredientsSection />
-                    <p className="text-lg">Show favorites</p>
+                    <FavoritesSection />
                 </div>
             </div>
             <footer className="flex justify-center gap-2">
