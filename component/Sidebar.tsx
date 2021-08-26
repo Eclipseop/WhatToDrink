@@ -59,8 +59,7 @@ const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient }: Props
                         <div className="w-11/12">
                             <ReactSearchAutocomplete
                                 items={searchIngredients}
-                                //addIngredient(e.name)
-                                onSelect={(e: {name: string, id: number}) => console.log(e)}
+                                onSelect={(e: {name: string, id: number}) => addIngredient(e.name)}
                                 autoFocus
                                 styling={{
                                     border: '1px solid #9CA38F',
