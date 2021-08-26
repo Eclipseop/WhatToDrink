@@ -1,5 +1,5 @@
 import React from 'react';
-import { Cocktail, Ingredient } from '../pages';
+import { Cocktail, Ingredient, UserFavoriteCocktail } from '../pages';
 import axios from 'axios';
 import { useSession } from 'next-auth/client';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
@@ -9,9 +9,9 @@ import Image from 'next/image';
 interface Props {
     cocktail: Cocktail;
     available?: string[];
-    favorites?: number[];
-    addFavorite?: (id: number) => void;
-    removeFavorite?: (id: number) => void;
+    favorites?: UserFavoriteCocktail[];
+    addFavorite?: (fav: UserFavoriteCocktail) => void;
+    removeFavorite?: (fav: UserFavoriteCocktail) => void;
     displayFullDesc?: boolean;
 }
 
@@ -31,21 +31,31 @@ const DrinkModal = ({ cocktail, available, favorites, addFavorite, removeFavorit
 
     const submitAddFavorite = () => {
         if (!addFavorite) return;
-        addFavorite(cocktail.id);
+        addFavorite({
+            int: cocktail.id,
+            cocktailId: cocktail.id,
+            userId: null,
+            cocktail: cocktail,
+        });
         axios.post('/api/add-favorite', { cocktail: cocktail.id }).catch(err => console.error(err));
 
     };
 
     const submitRemoveFavorite = () => {
         if (!removeFavorite) return;
-        removeFavorite(cocktail.id);
+        removeFavorite({
+            int: cocktail.id,
+            cocktailId: cocktail.id,
+            userId: null,
+            cocktail: cocktail,
+        });
         axios.post('/api/remove-favorite', { cocktail: cocktail.id }).catch(err => console.error(err));
     };
 
     const isFavorite = (): boolean => {
         if (!favorites) return false;
         for (const fav of favorites) {
-            if (fav === cocktail.id) return true;
+            if (fav.cocktailId === cocktail.id) return true;
         }
 
         return false;

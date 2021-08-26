@@ -58,8 +58,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             user: {
                 email: user?.email
             }
+        },
+        include: {
+            cocktail: true,
         }
-    })).map(p => p.cocktailId);
+    }));
 
     const ingredients = data.map(data => data.name);
 
@@ -68,14 +71,21 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     };
 };
 
+export type UserFavoriteCocktail = {
+    int: number;
+    cocktailId: number | null;
+    userId: string | null;
+    cocktail: Cocktail | null;
+}
+
 interface SearchProps {
     ingredients: string[];
-    favoriteCocktails: number[];
+    favoriteCocktails: UserFavoriteCocktail[];
 }
 
 const Index = (props: SearchProps) => {
     const [ingredients, setIngredients] = useState<string[]>(props.ingredients);
-    const [favoriteCocktails, setFavoriteCocktails] = useState<number[]>(props.favoriteCocktails);
+    const [favoriteCocktails, setFavoriteCocktails] = useState<UserFavoriteCocktail[]>(props.favoriteCocktails);
     const [cocktails, setCocktails] = useState<Cocktail[]>([]);
     const [session] = useSession();
     const [pageIdx, setPageIdx] = useState(0);
@@ -135,7 +145,7 @@ const Index = (props: SearchProps) => {
                             available={ingredients}
                             favorites={favoriteCocktails}
                             addFavorite={(e) => setFavoriteCocktails(favoriteCocktails.concat([e]))}
-                            removeFavorite={(e) => setFavoriteCocktails(favoriteCocktails.filter(i => i !== e))}
+                            removeFavorite={(e) => setFavoriteCocktails(favoriteCocktails.filter(i => i.cocktailId !== e.cocktailId))}
                         />
                     )}
                 </div>
