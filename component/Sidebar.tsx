@@ -13,10 +13,11 @@ interface Props {
     ingredients: string[];
     addIngredient: (ingredient: string) => void;
     removeIngredient: (ingredient: string) => void;
+    showFavorites: boolean;
+    setShowFavorites: (showFavorites: boolean) => void;
 }
 
 const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient }: Props) => {
-    const [active, setActive] = useState('ingredients');
     const [session] = useSession();
     const avatar = session?.user?.image;
 
@@ -76,7 +77,7 @@ const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient }: Props
                         </>
                     )}
                 </div>
-                <div className="mt-5 flex items-center gap-1" onClick={() => setActive('ingredients')}>
+                <div className="mt-5 flex items-center gap-1">
                     <FontAwesomeIcon icon={faCoffee} className="h-[16px]" />
                     <h1>Ingredients</h1>
                 </div>

@@ -28,9 +28,17 @@ export interface Ingredient {
 }
 
 const generateURL = (ingredients: string[], pageIdx: number): string => {
-    let base = "api/get-drinks-by-ingredients?ingredients=";
-    base += ingredients.join(",");
-    base += '&idx=' + pageIdx;
+    let base = 'api/';
+    if (!ingredients || ingredients.length === 0) {
+        base += 'get-drinks';
+        base += '?idx=' + pageIdx;
+    } else {
+        base += 'get-drinks-by-ingredients?ingredients=';
+        base += ingredients.join(",");
+        base += '&idx=' + pageIdx;
+
+    }
+
     return base;
 };
 
@@ -91,9 +99,10 @@ const Index = (props: SearchProps) => {
     const [pageIdx, setPageIdx] = useState(0);
     const [shrink, setShrink] = useState(true);
 
+    const [onlyShowFavorites, setOnlyShowFavorites] = useState(false);
+
     useEffect(() => {
         const fetch = async () => {
-            if (ingredients.length === 0) return;
             const { data } = await axios.get<Cocktail[]>(generateURL(ingredients, pageIdx));
             setCocktails(data);
         };
@@ -138,7 +147,12 @@ const Index = (props: SearchProps) => {
                 loader={<p>Loading...</p>}
             >
                 <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-items-center w-11/12 mx-auto gap-3">
-                    {cocktails.map((drink) =>
+                    {cocktails.filter((drink) => {
+                        if (onlyShowFavorites) {
+                            return favoriteCocktails.some(favorite => favorite.cocktailId === drink.id);
+                        }
+                        return true;   
+                    }).map((drink) =>
                         <DrinkModal
                             key={drink.id}
                             cocktail={drink}
@@ -169,7 +183,14 @@ const Index = (props: SearchProps) => {
             </Head>
             <div className="flex flex-row flex-1">
                 <div className="w-1/4 max-w-[14rem] flex-none">
-                    <Sidebar shrink={shrink} ingredients={ingredients} addIngredient={addIngredient} removeIngredient={removeIngredient} />
+                    <Sidebar 
+                        showFavorites={onlyShowFavorites} 
+                        setShowFavorites={(e) => setOnlyShowFavorites(e)} 
+                        shrink={shrink} 
+                        ingredients={ingredients} 
+                        addIngredient={addIngredient} 
+                        removeIngredient={removeIngredient} 
+                    />
                 </div>
                 <div className="flex-grow bg-gradient-to-tr from-red-500 to-yellow-300 py-3">
                     <ShowResults />

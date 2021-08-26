@@ -16,7 +16,7 @@ interface Props {
 }
 
 const has = (available: string[] | undefined, ingredient: Ingredient): boolean => {
-    if (!available) return true;
+    if (!available || available.length === 0) return true;
     for (const avail of available) {
         const ing = ingredient.name.toLowerCase();
         const avail1 = avail.toLowerCase();
