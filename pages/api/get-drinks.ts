@@ -9,7 +9,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return;
     }
 
+    const { idx } = req.query;
+    const num = idx ? parseInt(idx as string) : 0;
+
     const data = await prisma.cocktail.findMany({
+        skip: num * 25,
         take: 25,
         include: {
             ingredients: true,

@@ -24,12 +24,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return;
     }
 
+    // eslint-disable-next-line prefer-const
     let { ingredients: available, idx } = req.query;
-
-    if (Array.isArray(idx)) {
-        idx = idx.join('');
-    }
-    const num = parseInt(idx);
+    const num = idx ? parseInt(idx as string) : 0;
 
     if (!Array.isArray(available)) {
         available = available.split(',');
