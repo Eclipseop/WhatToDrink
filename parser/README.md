@@ -4,7 +4,7 @@ The current code will add some duplicates. Run these SQL queries to remove:
 ```sql
 DELETE
 FROM "Cocktail" A USING "Cocktail" B
-WHERE A.name = B.year AND A.id < B.id
+WHERE A.name = B.name AND A.id < B.id
 
 DELETE
 FROM "Ingredient"
