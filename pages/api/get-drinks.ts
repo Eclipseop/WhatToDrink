@@ -40,7 +40,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             return score(ingredients, b.ingredients) - score(ingredients, a.ingredients);
         });
     }
-    data = data.splice(num * 25, 25);
+    data = data.splice(num * 30, 30);
     
     console.log(`Sending to drinks on page ${num} with ingredients ${ingredients}`);
     res.status(200).json(data);
