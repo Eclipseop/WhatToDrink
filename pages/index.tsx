@@ -28,15 +28,13 @@ export interface Ingredient {
 }
 
 const generateURL = (ingredients: string[], pageIdx: number): string => {
-    let base = 'api/';
+    let base = 'api/get-drinks';
     if (!ingredients || ingredients.length === 0) {
-        base += 'get-drinks';
         base += '?idx=' + pageIdx;
     } else {
-        base += 'get-drinks-by-ingredients?ingredients=';
+        base += '?ingredients=';
         base += ingredients.join(",");
         base += '&idx=' + pageIdx;
-
     }
 
     return base;
