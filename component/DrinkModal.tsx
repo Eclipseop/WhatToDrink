@@ -37,7 +37,7 @@ const DrinkModal = ({ cocktail, available, favorites, addFavorite, removeFavorit
             userId: null,
             cocktail: cocktail,
         });
-        axios.post('/api/add-favorite', { cocktail: cocktail.id }).catch(err => console.error(err));
+        axios.post('/api/user/favorite', { cocktail: cocktail.id }).catch(err => console.error(err));
 
     };
 
@@ -49,7 +49,7 @@ const DrinkModal = ({ cocktail, available, favorites, addFavorite, removeFavorit
             userId: null,
             cocktail: cocktail,
         });
-        axios.post('/api/remove-favorite', { cocktail: cocktail.id }).catch(err => console.error(err));
+        axios.delete('/api/user/favorite', {data: { cocktail: cocktail.id }}).catch(err => console.error(err));
     };
 
     const isFavorite = (): boolean => {

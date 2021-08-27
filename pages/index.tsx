@@ -115,7 +115,7 @@ const Index = (props: SearchProps) => {
         setIngredients(newIngredients);
 
         if (!session) return;
-        axios.post('/api/add-ingredient-to-account', { ingredient }).catch(err => console.error(err));
+        axios.post('/api/user/ingredient', { ingredient }).catch(err => console.error(err));
     };
 
     const removeIngredient = (ingredient: string) => {
@@ -124,7 +124,7 @@ const Index = (props: SearchProps) => {
         setIngredients(newIngredients);
 
         if (!session) return;
-        axios.post('/api/remove-ingredient-from-account', { ingredient }).catch(err => console.error(err));
+        axios.delete('/api/user/ingredient', {data: { ingredient }}).catch(err => console.error(err));
     };
 
     const fetchMore = async () => {
