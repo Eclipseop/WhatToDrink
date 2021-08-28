@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import DrinkModal from '../component/DrinkModal';
 import axios from 'axios';
 import { useSession, getSession } from 'next-auth/client';
 import { GetServerSideProps } from 'next';
-import Head from 'next/head';
 import prisma from '../prisma/db';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Sidebar from '../component/Sidebar';
@@ -95,14 +94,22 @@ const Index = (props: SearchProps) => {
     const [cocktails, setCocktails] = useState<Cocktail[]>([]);
     const [session] = useSession();
     const [pageIdx, setPageIdx] = useState(0);
-    const [shrink, setShrink] = useState(true);
-
+    const [smallSidebar, setSmallSidebar] = useState(true);
+    const topRef = useRef(null);
     const [onlyShowFavorites, setOnlyShowFavorites] = useState(false);
+
+    const scroll = () => {
+        if (topRef && topRef.current) {
+            // @ts-ignore
+            topRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
 
     useEffect(() => {
         const fetch = async () => {
             const { data } = await axios.get<Cocktail[]>(generateURL(ingredients, pageIdx));
             setCocktails(data);
+            setTimeout(scroll, 500);
         };
         fetch();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -168,29 +175,20 @@ const Index = (props: SearchProps) => {
 
     return (
         <div className="min-h-screen flex flex-col">
-            <Head>
-                <title>Home | WhatToDrink</title>
-                <meta property="og:title" content="Home | WhatToDrink" key="title" />
-                <meta name="description" content="WhatToDrink is the best way to find new drinks! Input ingredients and see what you can make!" />
-                <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-                <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-                <link rel="manifest" href="/site.webmanifest" />
-                <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
-                <meta name="theme-color" content="#ffffff" />
-            </Head>
+            <div ref={topRef} />
+
             <div className="flex flex-row flex-1">
-                <div className="w-1/4 max-w-[14rem] flex-none">
+                <div className={`${smallSidebar ? 'w-2/12 md:w-1/12' : 'w-2/3 sm:w-1/6'} transition-width delay-75 ease-out md:max-w-[14rem] flex-none`} onClick={() => setSmallSidebar(false)}>
                     <Sidebar 
                         showFavorites={onlyShowFavorites} 
                         setShowFavorites={(e) => setOnlyShowFavorites(e)} 
-                        shrink={shrink} 
+                        smallSidebar={smallSidebar} 
                         ingredients={ingredients} 
                         addIngredient={addIngredient} 
-                        removeIngredient={removeIngredient} 
+                        removeIngredient={removeIngredient}
                     />
                 </div>
-                <div className="flex-grow bg-gradient-to-tr from-red-500 to-yellow-300 py-3">
+                <div className="flex-grow bg-gradient-to-tr from-red-500 to-yellow-300 py-3" onClick={() => setSmallSidebar(true)}>
                     <ShowResults />
                 </div>
             </div>
