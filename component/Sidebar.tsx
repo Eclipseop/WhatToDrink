@@ -93,14 +93,14 @@ const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient, showFav
                         </>
                     )}
                 </div>
-                <div className="w-11/12 flex flex-col">
+                <div className="w-11/12 flex flex-col text-sm md:text-lg">
                     <IngredientsSection />
                     <FavoritesSection />
                 </div>
             </div>
-            <footer className="flex justify-center gap-2">
+            <footer className="flex flex-col md:flex-row items-center justify-center gap-0 md:gap-2">
                 <Link href="/privacy-policy">Privacy Policy</Link>
-                <a className="text-center" href="https://github.com/Eclipseop/WhatToDrink" target="_blank" rel="noreferrer">GitHub</a>
+                <a href="https://github.com/Eclipseop/WhatToDrink" target="_blank" rel="noreferrer">GitHub</a>
             </footer>
         </div>
     );

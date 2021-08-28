@@ -7,3 +7,5 @@ prisma/migrations
 docker-compose.yaml
 
 *.log
+workbox*
+sw.js*
