@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { faCoffee, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { signIn, signOut, useSession } from 'next-auth/client';
@@ -9,7 +9,7 @@ import searchIngredients from './ingredients';
 import Link from 'next/link';
 
 interface Props {
-    shrink: boolean;
+    smallSidebar: boolean;
     ingredients: string[];
     addIngredient: (ingredient: string) => void;
     removeIngredient: (ingredient: string) => void;
@@ -17,7 +17,7 @@ interface Props {
     setShowFavorites: (showFavorites: boolean) => void;
 }
 
-const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient, showFavorites, setShowFavorites }: Props) => {
+const Sidebar = ({ smallSidebar, ingredients, addIngredient, removeIngredient, showFavorites, setShowFavorites }: Props) => {
     const [session] = useSession();
     const avatar = session?.user?.image;
 
@@ -33,30 +33,41 @@ const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient, showFav
     const IngredientsSection = () => {
         return (
             <div className="mt-6">
-                <div className="flex flex-row items-center gap-1">
-                    <FontAwesomeIcon icon={faCoffee} className="h-[16px]" />
-                    <h1>Ingredients</h1>
-                </div>
-                <ReactSearchAutocomplete
-                    items={searchIngredients}
-                    onSelect={(e: {name: string, id: number}) => addIngredient(e.name)}
-                    autoFocus
-                    styling={{
-                        border: '1px solid #9CA38F',
-                        borderRadius: '6px',
-                        boxShadow: 'none',
-                        height: '28px',
-                        searchIconMargin: '3px',
-                        clearIconMargin: "3px"
-                    }}
-                />
                 {
-                    ingredients.map(ingredient => (
-                        <div key={ingredient} >
-                            <label htmlFor={ingredient}><input type="checkbox" id={ingredient} name={ingredient} onChange={(e) => handleCheckboxClick(e)} checked={ingredients.includes(ingredient)}/> {ingredient} </label>
-                        </div>
-                    ))
+                    smallSidebar ?
+                        <FontAwesomeIcon icon={faCoffee} className="h-[16px] hover:text-red-300" />
+                        :
+                        <>
+                            <div className="flex flex-row items-center gap-1">
+                                <FontAwesomeIcon icon={faCoffee} className="h-[16px]" />
+                                <h1>Ingredients</h1>
+                            </div>
+                
+                            <ReactSearchAutocomplete
+                                items={searchIngredients}
+                                onSelect={(e: {name: string, id: number}) => addIngredient(e.name)}
+                                autoFocus
+                                styling={{
+                                    border: '1px solid #9CA38F',
+                                    borderRadius: '6px',
+                                    boxShadow: 'none',
+                                    height: '28px',
+                                    searchIconMargin: '3px',
+                                    clearIconMargin: "3px"
+                                }}
+                            />
+                
+                            {
+                                ingredients.map(ingredient => (
+                                    <div key={ingredient} >
+                                        <label htmlFor={ingredient}><input type="checkbox" id={ingredient} name={ingredient} onChange={(e) => handleCheckboxClick(e)} checked={ingredients.includes(ingredient)}/> {ingredient} </label>
+                                    </div>
+                                ))
+                            }
+                        </>
                 }
+                
+                
             </div>
         );
     };
@@ -64,11 +75,19 @@ const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient, showFav
     const FavoritesSection = () => {
         return (
             <div className="mt-6">
-                <div className="flex flex-row items-center gap-1">
-                    <FontAwesomeIcon icon={faStar} className="h-[16px]" />
-                    <h1>Favorites</h1>
-                </div>
-                <label htmlFor="favorite"><input type="checkbox" id="favorite" name="favorite" onChange={() => setShowFavorites(!showFavorites)} checked={showFavorites}/> Show Only Favorites</label>
+                {
+                    smallSidebar ?
+                        <FontAwesomeIcon icon={faStar} className="h-[16px] hover:text-red-300" />
+                        :
+                        <>
+                            <div className="flex flex-row items-center gap-1">
+                                <FontAwesomeIcon icon={faStar} className="h-[16px]" />
+                                <h1>Favorites</h1>
+                            </div>
+                            <label htmlFor="favorite"><input type="checkbox" id="favorite" name="favorite" onChange={() => setShowFavorites(!showFavorites)} checked={showFavorites}/> Show Only Favorites</label>
+
+                        </>
+                }
             </div>
         );
     };
@@ -93,7 +112,7 @@ const Sidebar = ({ shrink, ingredients, addIngredient, removeIngredient, showFav
                         </>
                     )}
                 </div>
-                <div className="w-11/12 flex flex-col text-sm md:text-lg">
+                <div className={`w-11/12 flex flex-col text-sm md:text-lg ${smallSidebar ? 'items-center' : ''}`}>
                     <IngredientsSection />
                     <FavoritesSection />
                 </div>
