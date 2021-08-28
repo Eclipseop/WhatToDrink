@@ -1,6 +1,6 @@
 {
-    "name": "PWA App",
-    "short_name": "App",
+    "name": "WhatToDrink",
+    "short_name": "WhatToDrink",
     "icons": [
       {
         "src": "/android-chrome-192x192.png",
