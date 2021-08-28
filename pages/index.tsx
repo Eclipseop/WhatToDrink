@@ -168,17 +168,6 @@ const Index = (props: SearchProps) => {
 
     return (
         <div className="min-h-screen flex flex-col">
-            <Head>
-                <title>Home | WhatToDrink</title>
-                <meta property="og:title" content="Home | WhatToDrink" key="title" />
-                <meta name="description" content="WhatToDrink is the best way to find new drinks! Input ingredients and see what you can make!" />
-                <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-                <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-                <link rel="manifest" href="/site.webmanifest" />
-                <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
-                <meta name="theme-color" content="#ffffff" />
-            </Head>
             <div className="flex flex-row flex-1">
                 <div className="w-1/4 max-w-[14rem] flex-none">
                     <Sidebar 
