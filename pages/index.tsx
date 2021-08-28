@@ -28,7 +28,7 @@ export interface Ingredient {
 }
 
 const generateURL = (ingredients: string[], pageIdx: number): string => {
-    let base = 'api/get-drinks';
+    let base = 'api/drinks';
     if (!ingredients || ingredients.length === 0) {
         base += '?idx=' + pageIdx;
     } else {

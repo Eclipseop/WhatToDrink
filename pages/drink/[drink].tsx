@@ -11,7 +11,7 @@ const Drink = () => {
     const { drink } = useRouter().query;
     if (!drink) return <div>Drink not found</div>;
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { data, error } = useSWR('/api/get-drink?drinkId=' + drink, fetcher);
+    const { data, error } = useSWR('/api/drink?drinkId=' + drink, fetcher);
 
     if (!data || error) return <p>{error}</p>;
 
