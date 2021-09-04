@@ -35,7 +35,7 @@ const Sidebar = ({ smallSidebar, ingredients, addIngredient, removeIngredient, s
             <div className="mt-6">
                 {
                     smallSidebar ?
-                        <FontAwesomeIcon icon={faCoffee} className="h-[16px] hover:text-red-300" />
+                        <FontAwesomeIcon icon={faCoffee} className="h-[16px] transition ease-out delay-75 hover:text-red-300" />
                         :
                         <>
                             <div className="flex flex-row items-center gap-1">
@@ -67,7 +67,6 @@ const Sidebar = ({ smallSidebar, ingredients, addIngredient, removeIngredient, s
                         </>
                 }
                 
-                
             </div>
         );
     };
@@ -77,7 +76,7 @@ const Sidebar = ({ smallSidebar, ingredients, addIngredient, removeIngredient, s
             <div className="mt-6">
                 {
                     smallSidebar ?
-                        <FontAwesomeIcon icon={faStar} className="h-[16px] hover:text-red-300" />
+                        <FontAwesomeIcon icon={faStar} className="h-[16px] transition ease-out delay-75 hover:text-red-300" />
                         :
                         <>
                             <div className="flex flex-row items-center gap-1">
