@@ -117,7 +117,7 @@ const Sidebar = ({ smallSidebar, ingredients, addIngredient, removeIngredient, s
                     <FavoritesSection />
                 </div>
             </div>
-            <footer className="flex flex-col md:flex-row items-center justify-center gap-0 md:gap-2">
+            <footer className="flex flex-col lg:flex-row items-center justify-center text-xs md:text-sm gap-0 lg:gap-2">
                 <Link href="/privacy-policy">Privacy Policy</Link>
                 <a href="https://github.com/Eclipseop/WhatToDrink" target="_blank" rel="noreferrer">GitHub</a>
             </footer>
