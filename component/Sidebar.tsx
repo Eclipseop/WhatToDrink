@@ -93,7 +93,7 @@ const Sidebar = ({ smallSidebar, ingredients, addIngredient, removeIngredient, s
     };
 
     return (
-        <div className="pl-1 h-screen flex flex-col sticky top-0">
+        <div className="px-1 h-screen flex flex-col sticky top-0">
             <h1 className="font-semibold text-center">What to Drink</h1>
 
             <div className="font-light flex-grow">
