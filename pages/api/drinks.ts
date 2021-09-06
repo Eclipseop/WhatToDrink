@@ -1,5 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 import type { NextApiRequest, NextApiResponse } from 'next';
+import NextCors from 'nextjs-cors';
 
 import { Ingredient } from '@prisma/client';
 import prisma from '../../prisma/db';
@@ -18,6 +19,12 @@ const score = (available: string[] | string, required: Ingredient[]): number => 
 };
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+    await NextCors(req, res, {
+        methods: ['GET'],
+        origin: process.env.NEXTAUTH_URL,
+        optionsSuccessStatus: 200,
+    });
+
     if (req.method !== 'GET') {
         res.status(405).send('Method not allowed');
         return;

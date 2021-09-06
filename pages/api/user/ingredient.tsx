@@ -3,8 +3,15 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { getSession } from 'next-auth/client';
 import prisma from '../../../prisma/db';
+import NextCors from 'nextjs-cors';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+    await NextCors(req, res, {
+        methods: ['DELETE', 'POST'],
+        origin: process.env.NEXTAUTH_URL,
+        optionsSuccessStatus: 200,
+    });
+
     const session = await getSession({ req });
     if (!session) {
         res.status(401).send('Unauthorized');
