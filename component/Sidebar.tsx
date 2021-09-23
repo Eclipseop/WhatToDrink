@@ -111,7 +111,7 @@ const Sidebar = ({ smallSidebar, ingredients, addIngredient, removeIngredient, s
                         </>
                     )}
                 </div>
-                <div className={`w-11/12 flex flex-col text-sm md:text-lg ${smallSidebar ? 'items-center' : ''}`}>
+                <div className={`w-11/12 flex flex-col ${smallSidebar ? 'items-center' : ''}`}>
                     <IngredientsSection />
                     <FavoritesSection />
                 </div>
